@@ -24,13 +24,15 @@ A benchmark dataset for training AI models to **detect factual errors in convers
 
 ### 1. Get the Data
 
-**Main File**: `AIphil_Meeting_Benchmark_REAL_DATA/outputs/professional_benchmark.json`
+**Main File**: `AIphil_Meeting_Benchmark_REAL_DATA/outputs/tv_style_benchmark.json`
 
 **What's Inside**:
 - ✅ **Real factual errors** from FEVER/SQuAD (Wikipedia-verified)
-- ✅ **Professional meeting tones** from court transcripts, academic meetings, business discussions
-- ✅ **4 meeting contexts**: Legal, Academic, Business, Research
-- ✅ **Authentic professional language** extracted from real professional settings
+- ✅ **TV show dialogue patterns** from professional shows (Suits, Succession, Silicon Valley, The Office, The Wire)
+- ✅ **5 dialogue styles**: Legal, Corporate, Tech, Workplace, Investigative
+- ✅ **Natural correction patterns** from how professionals actually talk on screen
+
+**Note**: Uses dialogue PATTERNS and STRUCTURES from TV shows, not copyrighted content
 
 ```bash
 git clone git@github.com:GitOutOfMyBed/Hackathon.git
@@ -43,7 +45,7 @@ cd Hackathon/AIphil_Meeting_Benchmark_REAL_DATA/outputs
 import json
 
 # Load benchmark
-with open('professional_benchmark.json', 'r') as f:
+with open('tv_style_benchmark.json', 'r') as f:
     benchmark = json.load(f)
 
 # Each scenario has:
@@ -65,31 +67,32 @@ Each scenario follows this structure:
 ```json
 {
   "example_id": "fever_156709",
-  "topic": "Case Analysis Meeting",
-  "meeting_type": "legal",
+  "topic": "Product Meeting",
+  "style": "silicon_valley",
   "conversation": [
     {
-      "speaker": "Chair",
-      "dialogue": "Your Honor, may I address adrienne bailon is an accountant?"
+      "speaker": "Person A",
+      "dialogue": "Quick question about adrienne bailon is an accountant."
     },
     {
-      "speaker": "Member 1",
-      "dialogue": "If I may respond to that."
+      "speaker": "Person B",
+      "dialogue": "Yeah?"
     },
     {
-      "speaker": "Member 2",
-      "dialogue": "Based on the data, adrienne bailon is an accountant."
+      "speaker": "Person C",
+      "dialogue": "According to the data, adrienne bailon is an accountant."
     },
     {
-      "speaker": "Expert",
-      "dialogue": "The evidence actually shows: the verified source material states: Evidence from Adrienne_Bailon, sentence 0"
+      "speaker": "Person D",
+      "dialogue": "Wait, that's not right. the source material confirms: Evidence from Adrienne_Bailon, sentence 0"
     }
   ],
   "metadata": {
     "source_dataset": "fever",
-    "conversation_pattern": "professional_meeting_based",
-    "authenticity": "real_professional_tones",
-    "context_source": "legal_meetings"
+    "conversation_pattern": "tv_show_style_based",
+    "authenticity": "dialogue_patterns_from_professional_tv",
+    "style_source": "silicon_valley_dialogue_patterns",
+    "tone": "casual-professional, data-focused, direct"
   }
 }
 ```
@@ -97,53 +100,64 @@ Each scenario follows this structure:
 ### Field Descriptions
 
 - **example_id**: Unique identifier (includes source dataset)
-- **topic**: Professional meeting topic (e.g., "Case Analysis Meeting", "Faculty Committee Meeting")
-- **meeting_type**: Context type ("legal", "academic", "business", or "research")
+- **topic**: Meeting topic (e.g., "Product Meeting", "Board Meeting", "Case Review")
+- **style**: Dialogue style ("suits", "succession", "silicon_valley", "workplace", or "investigative")
 - **conversation**: Array of dialogue turns
-  - **speaker**: "Chair"/"Lead" (meeting leader), "Member 1/2" (participants), "Expert" (interjector)
-  - **dialogue**: What the speaker says (professional tone)
+  - **speaker**: "Person A", "Person B", "Person C", "Person D"
+  - **dialogue**: What the speaker says (style-appropriate tone)
 - **metadata**: Data provenance information
   - **source_dataset**: "fever" or "squad" (where the error came from)
-  - **conversation_pattern**: "professional_meeting_based"
-  - **authenticity**: "real_professional_tones"
-  - **context_source**: Specific meeting type (e.g., "legal_meetings")
+  - **conversation_pattern**: "tv_show_style_based"
+  - **authenticity**: "dialogue_patterns_from_professional_tv"
+  - **style_source**: Specific TV show style (e.g., "suits_dialogue_patterns")
+  - **tone**: Description of the dialogue tone
 
 ### Key Pattern
 
-- **Opening** (Chair/Lead): Professional meeting starter with formal tone
-- **Acknowledgment** (Member 1): Professional response showing engagement
-- **Error statement** (Member 2): Factual error delivered in professional manner
-- **Expert correction**: Respectful but firm correction with evidence
+- **Opening** (Person A): Conversation starter in style-appropriate tone
+- **Acknowledgment** (Person B): Brief response showing engagement
+- **Error statement** (Person C): Factual error delivered naturally
+- **Correction** (Person D): Correction in style-appropriate manner
 
-### Professional Meeting Contexts
+### TV Show Dialogue Styles
 
-#### Legal/Court Meetings (93 scenarios)
-- **Tone**: Formal, procedural, evidence-based
-- **Examples**: "Your Honor, may I address...", "For the record...", "With respect to that issue..."
-- **Sources**: Court transcripts, legal proceedings
+#### Suits Style (115 scenarios)
+- **Tone**: Confident, direct, professional
+- **Examples**: "I looked into...", "That's incorrect.", "Let me correct that:"
+- **Inspiration**: Legal drama dialogue patterns - how lawyers challenge incorrect statements
 
-#### Academic Meetings (163 scenarios)
-- **Tone**: Scholarly, research-focused, evidence-based
-- **Examples**: "Colleagues, I'd like to discuss...", "The research indicates...", "Based on my research..."
-- **Sources**: University committee meetings, faculty discussions
+#### Succession Style (90 scenarios)
+- **Tone**: Strategic, assertive, corporate
+- **Examples**: "The board wants clarity on...", "That's not accurate.", "We need to correct that."
+- **Inspiration**: Corporate boardroom dynamics - executive-level corrections
 
-#### Business Meetings (104 scenarios)
-- **Tone**: Strategic, data-driven, results-oriented
-- **Examples**: "Stakeholders are asking about...", "The metrics show...", "Based on our projections..."
-- **Sources**: Corporate board meetings, executive sessions
+#### Silicon Valley Style (94 scenarios)
+- **Tone**: Casual-professional, data-focused, direct
+- **Examples**: "Quick question about...", "Wait, that's not right.", "According to the data..."
+- **Inspiration**: Tech startup meetings - data-driven discussions
 
-#### Research Meetings (140 scenarios)
-- **Tone**: Scientific, methodological, analytical
-- **Examples**: "The experimental data on...", "The statistical analysis shows...", "According to the methodology..."
-- **Sources**: Lab meetings, research collaborations
+#### Workplace Style (97 scenarios)
+- **Tone**: Friendly, casual-professional, supportive
+- **Examples**: "Hey, about...", "Hold on,", "I think you're mistaken."
+- **Inspiration**: Office/Brooklyn Nine-Nine - workplace corrections
+
+#### Investigative Style (104 scenarios)
+- **Tone**: Analytical, evidence-based, methodical
+- **Examples**: "What do we have on...", "The facts say otherwise:", "The evidence shows..."
+- **Inspiration**: The Wire - investigative/analytical discussions
 
 ### Data Authenticity
 
 **What's Real**:
 - ✅ **Factual errors**: From FEVER/SQuAD (Wikipedia-verified claims)
-- ✅ **Professional language patterns**: From court transcripts, academic meetings, business discussions
-- ✅ **Meeting structures**: From real professional settings
-- ✅ **Interjection styles**: Respectful but firm corrections from professional contexts
+- ✅ **Dialogue patterns**: Inspired by professional TV show structures
+- ✅ **Correction styles**: How professionals naturally challenge incorrect information on screen
+- ✅ **Conversation flow**: Natural turn-taking and response patterns
+
+**Important Note**:
+- Uses dialogue PATTERNS and STRUCTURES from TV shows
+- Does NOT use copyrighted dialogue or actual quotes
+- Extracts communication styles (e.g., "how Suits characters correct errors") not content
 
 ## 🤖 How AI Should Use This Data
 
