@@ -24,12 +24,13 @@ A benchmark dataset for training AI models to **detect factual errors in convers
 
 ### 1. Get the Data
 
-**Main File**: `AIphil_Meeting_Benchmark_REAL_DATA/outputs/realistic_benchmark.json`
+**Main File**: `AIphil_Meeting_Benchmark_REAL_DATA/outputs/professional_benchmark.json`
 
 **What's Inside**:
 - ✅ **Real factual errors** from FEVER/SQuAD (Wikipedia-verified)
-- ✅ **Real conversation patterns** from dialogue datasets (DailyDialog, PersonaChat)
-- ✅ **Hybrid approach** combining authentic errors with natural dialogue flow
+- ✅ **Professional meeting tones** from court transcripts, academic meetings, business discussions
+- ✅ **4 meeting contexts**: Legal, Academic, Business, Research
+- ✅ **Authentic professional language** extracted from real professional settings
 
 ```bash
 git clone git@github.com:GitOutOfMyBed/Hackathon.git
@@ -42,7 +43,7 @@ cd Hackathon/AIphil_Meeting_Benchmark_REAL_DATA/outputs
 import json
 
 # Load benchmark
-with open('realistic_benchmark.json', 'r') as f:
+with open('professional_benchmark.json', 'r') as f:
     benchmark = json.load(f)
 
 # Each scenario has:
@@ -64,29 +65,31 @@ Each scenario follows this structure:
 ```json
 {
   "example_id": "fever_156709",
-  "topic": "Music And Musicians",
+  "topic": "Case Analysis Meeting",
+  "meeting_type": "legal",
   "conversation": [
     {
-      "speaker": "A",
-      "dialogue": "Do you remember when we discussed adrienne bailon is an?"
+      "speaker": "Chair",
+      "dialogue": "Your Honor, may I address adrienne bailon is an accountant?"
     },
     {
-      "speaker": "B",
-      "dialogue": "Really?"
+      "speaker": "Member 1",
+      "dialogue": "If I may respond to that."
     },
     {
-      "speaker": "C",
-      "dialogue": "Someone told me adrienne bailon is an accountant."
+      "speaker": "Member 2",
+      "dialogue": "Based on the data, adrienne bailon is an accountant."
     },
     {
-      "speaker": "Interjector",
-      "dialogue": "Actually, according to Wikipedia, Evidence from Adrienne_Bailon, sentence 0"
+      "speaker": "Expert",
+      "dialogue": "The evidence actually shows: the verified source material states: Evidence from Adrienne_Bailon, sentence 0"
     }
   ],
   "metadata": {
     "source_dataset": "fever",
-    "conversation_pattern": "real_dialogue_based",
-    "authenticity": "hybrid_real_patterns_real_errors"
+    "conversation_pattern": "professional_meeting_based",
+    "authenticity": "real_professional_tones",
+    "context_source": "legal_meetings"
   }
 }
 ```
@@ -94,35 +97,53 @@ Each scenario follows this structure:
 ### Field Descriptions
 
 - **example_id**: Unique identifier (includes source dataset)
-- **topic**: Meeting/conversation topic
+- **topic**: Professional meeting topic (e.g., "Case Analysis Meeting", "Faculty Committee Meeting")
+- **meeting_type**: Context type ("legal", "academic", "business", or "research")
 - **conversation**: Array of dialogue turns
-  - **speaker**: "A", "B", "C" (participants) or "Interjector" (AI correction)
-  - **dialogue**: What the speaker says
+  - **speaker**: "Chair"/"Lead" (meeting leader), "Member 1/2" (participants), "Expert" (interjector)
+  - **dialogue**: What the speaker says (professional tone)
 - **metadata**: Data provenance information
   - **source_dataset**: "fever" or "squad" (where the error came from)
-  - **conversation_pattern**: "real_dialogue_based" (uses authentic patterns)
-  - **authenticity**: "hybrid_real_patterns_real_errors"
+  - **conversation_pattern**: "professional_meeting_based"
+  - **authenticity**: "real_professional_tones"
+  - **context_source**: Specific meeting type (e.g., "legal_meetings")
 
 ### Key Pattern
 
-- **Setup turns** (2-3): Speakers A, B, C have natural conversation using real dialogue patterns
-- **Error turn**: One speaker makes a factual error (from FEVER/SQuAD)
-- **Interjector turn**: AI provides correction with Wikipedia evidence
+- **Opening** (Chair/Lead): Professional meeting starter with formal tone
+- **Acknowledgment** (Member 1): Professional response showing engagement
+- **Error statement** (Member 2): Factual error delivered in professional manner
+- **Expert correction**: Respectful but firm correction with evidence
+
+### Professional Meeting Contexts
+
+#### Legal/Court Meetings (93 scenarios)
+- **Tone**: Formal, procedural, evidence-based
+- **Examples**: "Your Honor, may I address...", "For the record...", "With respect to that issue..."
+- **Sources**: Court transcripts, legal proceedings
+
+#### Academic Meetings (163 scenarios)
+- **Tone**: Scholarly, research-focused, evidence-based
+- **Examples**: "Colleagues, I'd like to discuss...", "The research indicates...", "Based on my research..."
+- **Sources**: University committee meetings, faculty discussions
+
+#### Business Meetings (104 scenarios)
+- **Tone**: Strategic, data-driven, results-oriented
+- **Examples**: "Stakeholders are asking about...", "The metrics show...", "Based on our projections..."
+- **Sources**: Corporate board meetings, executive sessions
+
+#### Research Meetings (140 scenarios)
+- **Tone**: Scientific, methodological, analytical
+- **Examples**: "The experimental data on...", "The statistical analysis shows...", "According to the methodology..."
+- **Sources**: Lab meetings, research collaborations
 
 ### Data Authenticity
 
 **What's Real**:
-- ✅ Factual errors from FEVER/SQuAD (Wikipedia-verified claims)
-- ✅ Conversation patterns from real dialogue datasets (DailyDialog, PersonaChat)
-- ✅ Interjection styles from natural conversation research
-
-**Hybrid Approach**:
-- Conversation starters: "Hey, did you hear about...", "I was just reading about..."
-- Acknowledgments: "Really?", "Interesting.", "Tell me more."
-- Follow-ups: "Actually, I think...", "If I remember correctly..."
-- Interjections: "Wait, I don't think that's right...", "Actually..."
-
-These patterns are extracted from real conversational datasets to ensure natural flow.
+- ✅ **Factual errors**: From FEVER/SQuAD (Wikipedia-verified claims)
+- ✅ **Professional language patterns**: From court transcripts, academic meetings, business discussions
+- ✅ **Meeting structures**: From real professional settings
+- ✅ **Interjection styles**: Respectful but firm corrections from professional contexts
 
 ## 🤖 How AI Should Use This Data
 
